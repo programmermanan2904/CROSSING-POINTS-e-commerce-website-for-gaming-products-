@@ -4,15 +4,15 @@ import Footer from "./components/Footer";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
-import Login from "./pages/login";
-import Register from "./pages/register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Shop from "./pages/Shop";
 import Dashboard from "./pages/vendor/Dashboard";
 import Products from "./pages/vendor/Products";
 import VendorLayout from "./layouts/VendorLayout";
 import Checkout from "./pages/Checkout";
-import VendorOrders from "./pages/vendor/VendorOrders";
+import VendorOrders from "./pages/vendor/vendorOrders";
 
 function App() {
   const location = useLocation();
