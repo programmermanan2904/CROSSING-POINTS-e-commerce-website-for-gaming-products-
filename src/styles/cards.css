@@ -1,0 +1,50 @@
+.page-container {
+  padding: 60px 8%;
+  min-height: 80vh;
+}
+
+.page-title {
+  font-size: 32px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+.category-card {
+  background: linear-gradient(145deg, #0b0d1a, #12142a);
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(155, 92, 255, 0.15);
+}
+
+.category-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.category-card p {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.category-card:hover {
+  transform: translateY(-8px);
+  border-color: #9b5cff;
+  box-shadow: 0 10px 30px rgba(155, 92, 255, 0.25);
+}
+
+/* Mobile safe (disable heavy hover feel) */
+@media (max-width: 768px) {
+  .category-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

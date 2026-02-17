@@ -1,0 +1,256 @@
+/* ===========================
+   NAVBAR BASE
+=========================== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 60px;
+
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+
+  font-family: 'Exo 2', sans-serif;   /* 🔥 Changed */
+
+  transition: 0.3s ease;
+}
+
+/* ===========================
+   LOGO
+=========================== */
+
+.logo {
+  font-family: 'Orbitron', sans-serif;   /* 🔥 Changed */
+  font-size: 22px;
+  letter-spacing: 4px;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s ease;
+}
+
+.logo:hover {
+  color: #8a2be2;
+  text-shadow: 0 0 10px #8a2be2;
+}
+
+/* ===========================
+   NAV LINKS
+=========================== */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.nav-links a,
+.dropbtn {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 14px;
+
+  position: relative;
+
+  color: #ccc;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+/* 🔥 Ensure nav links use Exo 2 */
+.nav-links a,
+.dropbtn {
+  font-family: 'Exo 2', sans-serif;
+}
+
+.nav-links a:hover,
+.dropbtn:hover {
+  color: white;
+  text-shadow: 0 0 8px #8a2be2;
+}
+
+/* Animated underline */
+.nav-links a::after,
+.dropbtn::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(to right, #8a2be2, #b266ff);
+  transition: 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.dropbtn:hover::after {
+  width: 100%;
+}
+
+/* ===========================
+   DROPDOWN
+=========================== */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  min-width: 190px;
+
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(15px);
+
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  border-radius: 8px;
+
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+
+  padding: 8px 0;
+
+  animation: dropdownFade 0.25s ease forwards;
+}
+
+.dropdown-content button {
+  width: 100%;
+  padding: 12px 18px;
+
+  background: none;
+  border: none;
+  text-align: left;
+
+  font-family: 'Exo 2', sans-serif;   /* 🔥 Changed */
+  font-size: 13px;
+  letter-spacing: 1px;
+
+  color: #ccc;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.dropdown-content button:hover {
+  background: rgba(138, 43, 226, 0.15);
+  color: white;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================
+   CART BADGE
+=========================== */
+
+.cart-link {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -15px;
+
+  background: #8a2be2;
+  color: white;
+
+  font-size: 11px;
+  padding: 4px 7px;
+  border-radius: 50%;
+
+  box-shadow: 0 0 8px #8a2be2;
+
+  animation: pulseBadge 1.5s infinite;
+}
+
+@keyframes pulseBadge {
+  0% {
+    box-shadow: 0 0 5px #8a2be2;
+  }
+  50% {
+    box-shadow: 0 0 15px #8a2be2;
+  }
+  100% {
+    box-shadow: 0 0 5px #8a2be2;
+  }
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 25px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+}
+
+/* ===========================
+   LOGOUT BUTTON (MATCH NAV LINKS)
+=========================== */
+
+.logout-btn {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 14px;
+
+  position: relative;
+
+  color: #ccc;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  font-family: 'Exo 2', sans-serif;
+  transition: 0.3s ease;
+}
+
+/* Hover effect same as links */
+.logout-btn:hover {
+  color: white;
+  text-shadow: 0 0 8px #8a2be2;
+}
+
+/* Animated underline */
+.logout-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(to right, #8a2be2, #b266ff);
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover::after {
+  width: 100%;
+}

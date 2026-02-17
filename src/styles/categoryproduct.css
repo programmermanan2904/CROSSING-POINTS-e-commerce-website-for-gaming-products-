@@ -1,0 +1,19 @@
+.category-container {
+  padding: 50px 8%;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #0f0c29, #1a1a40);
+}
+
+.category-title {
+  text-align: center;
+  color: white;
+  margin-bottom: 40px;
+  font-size: 26px;
+  letter-spacing: 2px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 30px;
+}

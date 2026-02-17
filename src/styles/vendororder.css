@@ -1,0 +1,87 @@
+.vendor-orders-container {
+  padding: 30px;
+  background: #0f0f14;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.vendor-orders-title {
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.order-card {
+  background: #1a1a24;
+  border: 1px solid #2a2a35;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  transition: 0.3s ease;
+}
+
+.order-card:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+}
+
+.order-header {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.order-header strong {
+  color: #ffffff;
+}
+
+.order-items {
+  margin-top: 15px;
+}
+
+.order-item {
+  background: #14141c;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #252533;
+}
+
+.order-item p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.status-select {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #2a2a35;
+  color: white;
+  cursor: pointer;
+}
+
+.status-select:focus {
+  outline: none;
+  border: 1px solid #7c3aed;
+}
+
+.no-orders {
+  color: #aaa;
+  font-size: 16px;
+  margin-top: 40px;
+}
+
+.order-address {
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.order-address h4 {
+  margin-bottom: 8px;
+  color: #8a2be2;
+}

@@ -1,0 +1,53 @@
+.shop-container {
+    padding: 60px 40px;
+    background: linear-gradient(to bottom, #0f0f0f, #141414);
+    color: white;
+    min-height: 100vh;
+}
+
+.shop-section {
+    margin-bottom: 100px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.shop-section:nth-child(1) { animation-delay: 0.1s; }
+.shop-section:nth-child(2) { animation-delay: 0.2s; }
+.shop-section:nth-child(3) { animation-delay: 0.3s; }
+.shop-section:nth-child(4) { animation-delay: 0.4s; }
+.shop-section:nth-child(5) { animation-delay: 0.5s; }
+
+.shop-heading {
+    font-size: 34px;
+    margin-bottom: 30px;
+    color: #8a2be2;
+    text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+    letter-spacing: 3px;
+    transition: 0.3s ease;
+}
+
+.shop-heading:hover {
+    text-shadow: 0 0 20px #8a2be2, 0 0 40px #8a2be2;
+}
+
+.shop-section::after {
+    content: "";
+    display: block;
+    height: 1px;
+    margin-top: 60px;
+    background: linear-gradient(to right, transparent, #8a2be2, transparent);
+}
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

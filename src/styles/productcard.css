@@ -1,0 +1,40 @@
+/* ================= ADD TO CART BUTTON ================= */
+
+.shop-container .add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+
+  background: linear-gradient(to right, #8a2be2, #b266ff);
+  border: none;
+  color: white;
+  font-family: 'Audiowide', cursive;
+  font-size: 14px;
+
+  border-radius: 8px;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  outline: none;
+}
+
+/* Hover */
+.shop-container .add-btn:hover {
+  background: linear-gradient(to right, #8a2be2, #b266ff);
+  box-shadow: 0 0 20px #8a2be2;
+  transform: translateY(-3px);
+}
+
+/* Active (click) */
+.shop-container .add-btn:active {
+  background: linear-gradient(to right, #8a2be2, #b266ff);
+  transform: scale(0.97);
+}
+
+/* Remove browser focus ring */
+.shop-container .add-btn:focus,
+.shop-container .add-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
