@@ -21,7 +21,7 @@ const Cart = () => {
   const total = subtotal + shipping + tax;
 
   // 🔥 Backend base URL (change if deployed)
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   if (!cart || cart.length === 0) {
     return (

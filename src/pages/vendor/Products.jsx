@@ -19,7 +19,7 @@ export default function Products() {
   const fetchVendorProducts = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/products/vendor",
+        import.meta.env.VITE_API_URL,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -49,7 +49,7 @@ export default function Products() {
       if (image) formData.append("image", image);
 
       await axios.post(
-        "http://localhost:5000/api/products",
+        import.meta.env.VITE_API_URL,
         formData,
         {
           headers: {
@@ -76,7 +76,7 @@ export default function Products() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/products/${id}`,
+        `import.meta.env.VITE_API_URL${id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

@@ -12,7 +12,7 @@ function ProductCard({ product }) {
   return (
     <div className="product-card">
       <img
-  src={`http://localhost:5000${product.image}`}
+  src={`import.meta.env.VITE_API_URL${product.image}`}
   alt={product.name}
 />
 

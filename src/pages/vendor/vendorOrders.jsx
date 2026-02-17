@@ -11,7 +11,7 @@ export default function VendorOrders() {
   const fetchVendorOrders = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/orders/vendor",
+        import.meta.env.VITE_API_URL,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

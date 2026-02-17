@@ -11,7 +11,7 @@ export default function Dashboard() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/products/vendor",
+          import.meta.env.VITE_API_URL,
           {
             headers: {
               Authorization: `Bearer ${token}`
