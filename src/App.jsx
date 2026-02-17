@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Shop from "./pages/Shop";
-import Dashboard from "./pages/vendor/Dashboard";
+import Dashboard from "./pages/vendor/DashBoard";
 import Products from "./pages/vendor/Products";
 import VendorOrders from "./pages/vendor/VendorOrders";
 import Checkout from "./pages/Checkout";
