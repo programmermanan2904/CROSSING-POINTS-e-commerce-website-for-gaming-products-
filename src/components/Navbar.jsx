@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 import "../styles/navbar.css";
+
+const BASE_URL = "http://localhost:5000";
 
 const Navbar = () => {
   const location = useLocation();
@@ -12,18 +15,48 @@ const Navbar = () => {
   const { cart } = useContext(CartContext);
   const { user, logout } = useContext(AuthContext);
 
-  // ✅ SAFE cart count calculation
   const cartCount = Array.isArray(cart)
     ? cart.reduce((total, item) => total + (item.quantity || 1), 0)
     : 0;
 
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const dropdownRef = useRef();
 
+  /* ================= FETCH CATEGORIES DYNAMICALLY ================= */
+  useEffect(() => {
+    if (isShopPage) {
+      axios
+        .get(`${BASE_URL}/api/products`)
+        .then((res) => {
+          const uniqueCategories = [
+            ...new Set(
+              res.data
+                .map((p) => p.category)
+                .filter(Boolean)
+            ),
+          ];
+          setCategories(uniqueCategories);
+        })
+        .catch((err) => {
+          console.log(err.response?.data || err.message);
+        });
+    }
+  }, [isShopPage]);
+
+  /* ================= SCROLL WITH OFFSET ================= */
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
+
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      const yOffset = -80;
+      const y =
+        section.getBoundingClientRect().top +
+        window.pageYOffset +
+        yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+
       setOpen(false);
     }
   };
@@ -33,7 +66,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -57,7 +89,6 @@ const Navbar = () => {
 
       <div className="nav-links">
         <Link to="/">Home</Link>
-
         <Link to="/shop">Shop</Link>
 
         {isShopPage && (
@@ -71,21 +102,20 @@ const Navbar = () => {
 
             {open && (
               <div className="dropdown-content">
-                <button onClick={() => scrollToSection("headphones")}>
-                  Headphones
-                </button>
-                <button onClick={() => scrollToSection("keyboard")}>
-                  Keyboard
-                </button>
-                <button onClick={() => scrollToSection("mouse")}>
-                  Mouse
-                </button>
-                <button onClick={() => scrollToSection("monitor")}>
-                  Monitor
-                </button>
-                <button onClick={() => scrollToSection("mousepads")}>
-                  Mousepads
-                </button>
+                {categories.map((category) => {
+                  const sectionId = category
+                    .toLowerCase()
+                    .replace(/\s+/g, "");
+
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => scrollToSection(sectionId)}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -94,17 +124,12 @@ const Navbar = () => {
         <Link to="/cart" className="cart-link">
           Cart
           {cartCount > 0 && (
-            <span className="cart-badge">
-              {cartCount}
-            </span>
+            <span className="cart-badge">{cartCount}</span>
           )}
         </Link>
 
         {user ? (
-          <button
-            onClick={handleLogout}
-            className="logout-btn"
-          >
+          <button onClick={handleLogout} className="logout-btn">
             Logout
           </button>
         ) : (

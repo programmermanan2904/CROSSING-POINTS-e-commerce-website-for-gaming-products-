@@ -254,3 +254,44 @@
 .logout-btn:hover::after {
   width: 100%;
 }
+
+/* Dropdown Container */
+.dropdown-content {
+  position: absolute;
+  background: #141428;
+  border: 1px solid #7a00ff;
+  border-radius: 10px;
+  padding: 12px 0;
+  min-width: 240px;
+  box-shadow: 0 0 15px rgba(122, 0, 255, 0.4);
+  z-index: 1000;
+}
+
+/* Section Titles */
+.dropdown-section {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #9d4dff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* Category Buttons */
+.dropdown-content button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.dropdown-content button:hover {
+  background: rgba(122, 0, 255, 0.2);
+  padding-left: 20px;
+}

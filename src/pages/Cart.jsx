@@ -3,9 +3,10 @@ import { CartContext } from "../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/cart.css";
 
+const CLOUD_NAME = "dv251twzd"; // 🔥 Put your real cloud name here
+
 const Cart = () => {
   const navigate = useNavigate();
-
   const { cart, addItem, decreaseItem, removeItem } =
     useContext(CartContext);
 
@@ -20,64 +21,79 @@ const Cart = () => {
   const tax = subtotal * 0.05;
   const total = subtotal + shipping + tax;
 
-  // 🔥 Backend base URL (change if deployed)
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
+  /* ================= EMPTY CART ================= */
   if (!cart || cart.length === 0) {
     return (
       <div className="empty-cart">
         <h2>🛒 Your Cart Is Empty</h2>
         <p>Level Up Your Setup</p>
-        <Link to="/shop" className="shop-btn">
-          Go To Shop
-        </Link>
+
+        <div className="empty-cart-buttons">
+          <Link to="/shop" className="primary-btn">
+            Go To Shop
+          </Link>
+
+          <Link to="/my-orders" className="primary-btn secondary-style">
+            View My Orders
+          </Link>
+        </div>
       </div>
     );
   }
 
+  /* ================= CART WITH ITEMS ================= */
   return (
     <div className="cart-container">
       <div className="cart-items">
-        {cart.map((item) => (
-          <div key={item._id} className="cart-item">
+        {cart.map((item) => {
+          const imageUrl = item.image
+            ? `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${item.image}`
+            : null;
 
-            {/* ✅ FIXED IMAGE PATH */}
-            <img
-              src={
-                item.image?.startsWith("http")
-                  ? item.image
-                  : `${BASE_URL}${item.image}`
-              }
-              alt={item.name}
-            />
+          return (
+            <div key={item._id} className="cart-item">
 
-            <div className="cart-details">
-              <h3>{item.name}</h3>
-              <p>₹ {item.price}</p>
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt={item.name}
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    objectFit: "contain",
+                  }}
+                />
+              )}
 
-              <div className="quantity-control">
-                <button onClick={() => decreaseItem(item._id)}>
-                  -
-                </button>
+              <div className="cart-details">
+                <h3>{item.name}</h3>
+                <p>₹ {item.price}</p>
 
-                <span>{item.quantity}</span>
+                <div className="quantity-control">
+                  <button onClick={() => decreaseItem(item._id)}>
+                    -
+                  </button>
 
-                <button onClick={() => addItem(item)}>
-                  +
+                  <span>{item.quantity}</span>
+
+                  <button onClick={() => addItem(item)}>
+                    +
+                  </button>
+                </div>
+
+                <button
+                  className="remove-btn"
+                  onClick={() => removeItem(item._id)}
+                >
+                  Remove
                 </button>
               </div>
-
-              <button
-                className="remove-btn"
-                onClick={() => removeItem(item._id)}
-              >
-                Remove
-              </button>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
+      {/* ================= ORDER SUMMARY ================= */}
       <div className="cart-summary">
         <h2>Order Summary</h2>
 
@@ -104,11 +120,18 @@ const Cart = () => {
         </div>
 
         <button
-          className="checkout-btn"
+          className="primary-btn full-width-btn"
           onClick={() => navigate("/checkout")}
         >
           Proceed To Checkout
         </button>
+
+        <Link
+          to="/my-orders"
+          className="secondary-link-btn"
+        >
+          View My Orders
+        </Link>
       </div>
     </div>
   );

@@ -173,3 +173,25 @@
     grid-template-columns: 1fr;
   }
 }
+
+.edit-btn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #6366f1;
+}
+
+.product-image-wrapper img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}

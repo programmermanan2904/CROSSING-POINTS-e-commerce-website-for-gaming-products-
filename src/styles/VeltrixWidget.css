@@ -1,0 +1,210 @@
+/* ================= TOGGLE BUTTON ================= */
+
+/* ================= PURPLE AI TOGGLE ================= */
+
+.veltrix-toggle {
+  position: fixed;
+  bottom: 35px;
+  right: 35px;
+  width: 70px;
+  height: 70px;
+
+  background: #7a00ff; /* Solid Purple */
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  z-index: 9999;
+
+  color: white;
+
+  box-shadow:
+    0 0 20px rgba(122, 0, 255, 0.6),
+    0 0 40px rgba(122, 0, 255, 0.4);
+
+  transition: all 0.3s ease;
+  animation: purplePulse 2.5s infinite ease-in-out;
+}
+
+.veltrix-toggle:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 30px rgba(122, 0, 255, 0.9),
+    0 0 60px rgba(122, 0, 255, 0.6);
+}
+
+
+/* ================= PULSE ANIMATION ================= */
+
+@keyframes purplePulse {
+  0% {
+    box-shadow:
+      0 0 20px rgba(122, 0, 255, 0.5),
+      0 0 35px rgba(122, 0, 255, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(122, 0, 255, 0.8),
+      0 0 70px rgba(122, 0, 255, 0.5);
+  }
+  100% {
+    box-shadow:
+      0 0 20px rgba(122, 0, 255, 0.5),
+      0 0 35px rgba(122, 0, 255, 0.3);
+  }
+}
+
+
+/* ================= CHAT BOX ================= */
+
+.veltrix-box {
+  position: fixed;
+  bottom: 105px;
+  right: 30px;
+  width: 380px;
+  height: 520px;
+  background: rgba(15, 15, 27, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  box-shadow:
+    0 0 30px rgba(122, 0, 255, 0.4),
+    0 0 60px rgba(0, 240, 255, 0.2);
+  overflow: hidden;
+}
+
+
+/* ================= HEADER ================= */
+
+.veltrix-header {
+  padding: 18px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 16px;
+  background: linear-gradient(90deg, #7a00ff, #00f0ff);
+  color: white;
+  letter-spacing: 1px;
+}
+
+
+/* ================= MESSAGES ================= */
+
+.veltrix-messages {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.veltrix-message {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.4;
+  white-space: pre-line;
+  animation: fadeIn 0.2s ease;
+}
+
+.veltrix-message.bot {
+  background: rgba(0, 240, 255, 0.08);
+  color: #00f0ff;
+  align-self: flex-start;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+.veltrix-message.user {
+  background: linear-gradient(135deg, #7a00ff, #a855f7);
+  color: white;
+  align-self: flex-end;
+}
+
+/* ================= CUSTOM SCROLLBAR ================= */
+
+.veltrix-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.veltrix-messages::-webkit-scrollbar-track {
+  background: rgba(20, 20, 40, 0.6);
+  border-radius: 10px;
+}
+
+.veltrix-messages::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7a00ff, #a855f7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(122, 0, 255, 0.6);
+}
+
+.veltrix-messages::-webkit-scrollbar-thumb:hover {
+  background: #9f4dff;
+}
+
+/* Firefox Support */
+.veltrix-messages {
+  scrollbar-width: thin;
+  scrollbar-color: #7a00ff rgba(20, 20, 40, 0.6);
+}
+
+
+/* ================= INPUT AREA ================= */
+
+.veltrix-input-area {
+  display: flex;
+  padding: 12px;
+  background: rgba(10, 10, 20, 0.9);
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  gap: 10px;
+}
+
+.veltrix-input-area input {
+  flex: 1;
+  padding: 12px;
+  background: #111827;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: white;
+  outline: none;
+  font-size: 14px;
+}
+
+.veltrix-input-area input:focus {
+  border: 1px solid #00f0ff;
+}
+
+.veltrix-input-area button {
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #7a00ff, #00f0ff);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.veltrix-input-area button:hover {
+  opacity: 0.85;
+}
+
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

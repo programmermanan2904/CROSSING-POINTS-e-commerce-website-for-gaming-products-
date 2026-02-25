@@ -141,10 +141,6 @@ const Home = () => {
           <Link to="/shop" className="primary-btn">
             Enter The Realm
           </Link>
-
-          <Link to="/shop" className="secondary-btn">
-            Explore Gear
-          </Link>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import "../styles/Vendor.css";
 
 export default function VendorLayout() {
@@ -9,9 +9,27 @@ export default function VendorLayout() {
         <h2 className="logo">Crossing Points</h2>
 
         <nav>
-          <Link to="/vendor/dashboard">Dashboard</Link>
-          <Link to="/vendor/products">My Products</Link>
-          <Link to="/vendor/orders">Orders</Link> {/* ✅ NEW */}
+          <NavLink
+            to="/vendor/dashboard"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            📊 Dashboard
+          </NavLink>
+
+          <NavLink
+            to="/vendor/products"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            🎮 My Products
+          </NavLink>
+
+          <NavLink
+            to="/vendor/orders"
+            className={({ isActive }) => isActive ? "active-link" : ""}
+          >
+            📦 Orders
+          </NavLink>
+
         </nav>
       </aside>
 

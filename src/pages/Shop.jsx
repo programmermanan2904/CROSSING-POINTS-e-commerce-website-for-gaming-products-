@@ -3,50 +3,74 @@ import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import "../styles/shop.css";
 
-const Shop = () => {
+const BASE_URL = "http://localhost:5000";
 
+const Shop = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(import.meta.env.VITE_API_URL)
-      .then(res => {
-        console.log("Fetched:", res.data);
+    axios
+      .get(`${BASE_URL}/api/products`)
+      .then((res) => {
+        console.log("SHOP PRODUCTS:", res.data); // Debug safely inside component
         setProducts(res.data);
+        setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.response?.data || err.message);
+        setLoading(false);
       });
   }, []);
 
-  if (!products.length) {
-    return <div className="shop-container">No products available</div>;
+  if (loading) {
+    return <div className="shop-container">Loading...</div>;
   }
 
-  const categories = [...new Set(products.map(p => p.category))];
+  const categories = [
+    ...new Set(
+      products
+        .map((p) => p.category)
+        .filter(Boolean)
+    ),
+  ];
 
   return (
     <div className="shop-container">
       {categories.map((category) => {
-
         const filteredProducts = products.filter(
           (product) =>
-            product.category?.toLowerCase() === category?.toLowerCase()
+            product.category &&
+            product.category.toLowerCase() === category.toLowerCase()
         );
 
+        const sectionId = category.toLowerCase().replace(/\s+/g, "");
+
         return (
-          <section key={category} className="shop-section">
+          <section
+            key={category}
+            id={sectionId}
+            className="shop-section"
+          >
             <h2 className="shop-heading">
               {category.toUpperCase()}
             </h2>
 
             <div className="shop-grid">
               {filteredProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                />
               ))}
             </div>
           </section>
         );
       })}
+
+      {categories.length === 0 && (
+        <div>No products available</div>
+      )}
     </div>
   );
 };

@@ -1,51 +1,68 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios"; // ✅ IMPORTANT
+import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/auth.css";
 
-export default function Login() {
+const BASE_URL = "http://localhost:5000";
 
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // ================= VALIDATION =================
+  const validateForm = () => {
+    let newErrors = {};
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email))
+      newErrors.email = "Enter a valid email address";
+
+    if (!password.trim())
+      newErrors.password = "Password is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // ================= LOGIN =================
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     try {
       const response = await axios.post(
-        import.meta.env.VITE_API_URL,
-        {
-          email,
-          password,
-        }
+        `${BASE_URL}/api/users/login`,
+        { email, password }
       );
 
       const data = response.data;
 
-      // ✅ Store correct token
-      localStorage.setItem("token", data.token);
+      // If backend uses structured response
+      const user = data.data?.user || data.user;
+      const token = data.data?.token || data.token;
 
-      // ✅ Store user
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      // ✅ Update AuthContext (very important)
-      login(data);
+      login({ user, token });
 
-      alert("Login successful");
-
-      // ✅ Use navigate instead of window.location
-      if (data.user.role === "vendor") {
+      if (user.role === "vendor") {
         navigate("/vendor/dashboard");
       } else {
         navigate("/");
       }
 
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      setErrors({
+        api: error.response?.data?.message || "Login failed",
+      });
     }
   };
 
@@ -54,23 +71,25 @@ export default function Login() {
       <div className="auth-card">
         <h2>Login</h2>
 
-        {/* ✅ FIXED HERE */}
+        {errors.api && <p className="error">{errors.api}</p>}
+
         <form onSubmit={handleLogin}>
+
           <input
             type="email"
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
+          {errors.email && <span className="error">{errors.email}</span>}
 
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          {errors.password && <span className="error">{errors.password}</span>}
 
           <button className="auth-btn" type="submit">
             Login

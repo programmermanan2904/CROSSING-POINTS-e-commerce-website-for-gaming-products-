@@ -114,3 +114,38 @@
 .role-toggle .slider.vendor {
   left: 50%;
 }
+
+.error {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.role-toggle {
+  display: flex;
+  background: #1a1a1a;
+  border-radius: 50px;          /* full pill curve */
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50px;          /* makes each button curved */
+  color: #aaa;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.toggle-btn.active {
+  background: linear-gradient(90deg, #8e2de2, #4a00e0);
+  color: white;
+  box-shadow: 0 4px 12px rgba(142, 45, 226, 0.4);
+  transform: scale(1.02);
+}

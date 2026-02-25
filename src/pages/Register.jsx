@@ -3,24 +3,61 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/auth.css";
 
+const BASE_URL = "http://localhost:5000";
+
 export default function Register() {
   const navigate = useNavigate();
 
-  // Common fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
 
-  // Vendor fields
   const [businessName, setBusinessName] = useState("");
   const [gstNumber, setGstNumber] = useState("");
   const [location, setLocation] = useState("");
 
   const [role, setRole] = useState("user");
+  const [errors, setErrors] = useState({});
 
+  // ================= VALIDATION =================
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!name.trim() || name.length < 2)
+      newErrors.name = "Name must be at least 2 characters";
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email))
+      newErrors.email = "Enter a valid email address";
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone))
+      newErrors.phone = "Phone must be 10 digits";
+
+    if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (role === "vendor") {
+      if (!businessName.trim())
+        newErrors.businessName = "Business name is required";
+
+      if (!gstNumber.trim())
+        newErrors.gstNumber = "GST number is required";
+
+      if (!location.trim())
+        newErrors.location = "Location is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     const userData = {
       name,
@@ -37,21 +74,27 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        import.meta.env.VITE_API_URL,
+        `${BASE_URL}/api/users/register`,
         userData
       );
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // If your backend now uses { success, message, data }
+      const user = response.data.data || response.data.user;
+      const token = response.data.data?.token || response.data.token;
 
-      if (response.data.user.role === "vendor") {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      if (user.role === "vendor") {
         navigate("/vendor/dashboard");
       } else {
         navigate("/");
       }
 
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      setErrors({
+        api: error.response?.data?.message || "Registration failed",
+      });
     }
   };
 
@@ -60,63 +103,58 @@ export default function Register() {
       <div className="auth-card">
         <h2>Register</h2>
 
-        <form onSubmit={handleSubmit}>
+        {errors.api && <p className="error">{errors.api}</p>}
 
-          {/* Role Toggle */}
-          <div className="role-toggle">
-            <button
-              type="button"
-              className={role === "user" ? "active" : ""}
-              onClick={() => setRole("user")}
-            >
-              User
-            </button>
-
-            <button
-              type="button"
-              className={role === "vendor" ? "active" : ""}
-              onClick={() => setRole("vendor")}
-            >
-              Vendor
-            </button>
-
-            <div className={`slider ${role}`}></div>
+        {/* ===== ROLE TOGGLE ===== */}
+        <div className="role-toggle">
+          <div
+            className={`toggle-btn ${role === "user" ? "active" : ""}`}
+            onClick={() => setRole("user")}
+          >
+            User
           </div>
 
-          {/* Common Fields */}
+          <div
+            className={`toggle-btn ${role === "vendor" ? "active" : ""}`}
+            onClick={() => setRole("vendor")}
+          >
+            Vendor
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
+          {errors.name && <span className="error">{errors.name}</span>}
 
           <input
             type="email"
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
+          {errors.email && <span className="error">{errors.email}</span>}
 
           <input
             type="tel"
             placeholder="Phone Number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            required
           />
+          {errors.phone && <span className="error">{errors.phone}</span>}
 
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          {errors.password && <span className="error">{errors.password}</span>}
 
-          {/* Vendor Specific Fields */}
           {role === "vendor" && (
             <>
               <input
@@ -124,24 +162,24 @@ export default function Register() {
                 placeholder="Business Name"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                required
               />
+              {errors.businessName && <span className="error">{errors.businessName}</span>}
 
               <input
                 type="text"
                 placeholder="GST Number"
                 value={gstNumber}
                 onChange={(e) => setGstNumber(e.target.value)}
-                required
               />
+              {errors.gstNumber && <span className="error">{errors.gstNumber}</span>}
 
               <input
                 type="text"
                 placeholder="Business Location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                required
               />
+              {errors.location && <span className="error">{errors.location}</span>}
             </>
           )}
 

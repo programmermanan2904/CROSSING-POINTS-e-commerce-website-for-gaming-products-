@@ -3,6 +3,8 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/vendororder.css";
 
+const BASE_URL = "http://localhost:5000";
+
 export default function VendorOrders() {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
@@ -11,7 +13,7 @@ export default function VendorOrders() {
   const fetchVendorOrders = async () => {
     try {
       const response = await axios.get(
-        import.meta.env.VITE_API_URL,
+        `${BASE_URL}/api/orders/vendor`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -35,7 +37,7 @@ export default function VendorOrders() {
   const updateStatus = async (orderId, itemId, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${orderId}/item/${itemId}/status`,
+        `${BASE_URL}/api/orders/${orderId}/item/${itemId}/status`,
         { status: newStatus },
         {
           headers: {
@@ -58,8 +60,12 @@ export default function VendorOrders() {
         <p className="no-orders">No orders yet.</p>
       ) : (
         orders.map((order) => (
-          <div key={order._id} className="order-card">
-
+          <div
+            key={order._id}
+            className={`order-card ${
+              order.orderStatus === "cancelled" ? "cancelled-order" : ""
+            }`}
+          >
             {/* ===== ORDER HEADER ===== */}
             <div className="order-header">
               <p><strong>Order ID:</strong> {order._id}</p>
@@ -70,9 +76,15 @@ export default function VendorOrders() {
                 <strong>Date:</strong>{" "}
                 {new Date(order.createdAt).toLocaleString()}
               </p>
+
+              {order.orderStatus === "cancelled" && (
+                <div className="cancelled-badge">
+                  ❌ Cancelled by Customer
+                </div>
+              )}
             </div>
 
-            {/* ===== SHIPPING ADDRESS SECTION ===== */}
+            {/* ===== SHIPPING ADDRESS ===== */}
             <div className="order-address">
               <h4>Shipping Address</h4>
               <p><strong>Name:</strong> {order.shippingAddress?.fullName}</p>
@@ -89,15 +101,32 @@ export default function VendorOrders() {
             {/* ===== ORDER ITEMS ===== */}
             <div className="order-items">
               {order.items.map((item) => (
-                <div key={item._id} className="order-item">
+                <div
+                  key={item._id}
+                  className={`order-item ${
+                    item.status === "cancelled" ? "cancelled-item" : ""
+                  }`}
+                >
                   <p><strong>Product:</strong> {item.product?.name}</p>
                   <p>Quantity: {item.quantity}</p>
                   <p>Price: ₹{item.price}</p>
-                  <p>Status: {item.status}</p>
+                  <p>
+                    Status:{" "}
+                    <span
+                      className={
+                        item.status === "cancelled"
+                          ? "status-cancelled"
+                          : ""
+                      }
+                    >
+                      {item.status}
+                    </span>
+                  </p>
 
                   <select
                     className="status-select"
                     value={item.status}
+                    disabled={item.status === "cancelled"}
                     onChange={(e) =>
                       updateStatus(order._id, item._id, e.target.value)
                     }

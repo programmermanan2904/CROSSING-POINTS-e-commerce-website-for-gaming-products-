@@ -1,17 +1,23 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [user, setUser] = useState(null);
 
+  // 🔥 Restore user on refresh
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Auth restore error:", error);
+    }
+  }, []);
+
+  // 🔥 Login (used for BOTH login & register)
   const login = (data) => {
     const userData = {
       ...data.user,
@@ -22,6 +28,7 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
+  // 🔥 Logout
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -33,3 +40,8 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+// Custom hook
+export const useAuth = () => {
+  return useContext(AuthContext);
+};

@@ -181,3 +181,24 @@
   display: flex;
   gap: 15px;
 }
+
+.payment-details {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-details input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #2d3748;
+  background: #1f2937;
+  color: white;
+}
+
+.payment-details input:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+}

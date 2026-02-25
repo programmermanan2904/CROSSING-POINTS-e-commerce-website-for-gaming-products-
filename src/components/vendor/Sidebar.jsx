@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -7,12 +7,29 @@ const Sidebar = () => {
 
       <nav>
         <ul>
+
           <li>
-            <Link to="/vendor/dashboard">Dashboard</Link>
+            <NavLink
+              to="/vendor/dashboard"
+              className={({ isActive }) =>
+                isActive ? "active-link" : ""
+              }
+            >
+              📊 Dashboard
+            </NavLink>
           </li>
+
           <li>
-            <Link to="/vendor/products">My Products</Link>
+            <NavLink
+              to="/vendor/products"
+              className={({ isActive }) =>
+                isActive ? "active-link" : ""
+              }
+            >
+              🎮 My Products
+            </NavLink>
           </li>
+
         </ul>
       </nav>
     </div>
