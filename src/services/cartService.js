@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -6,7 +6,7 @@ const getToken = () => {
 
 // GET CART
 export const getCart = async () => {
-  const res = await fetch(API_URL, {
+  const res = await fetch(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
     },
@@ -17,7 +17,7 @@ export const getCart = async () => {
 
 // ADD TO CART
 export const addToCart = async (product) => {
-  const res = await fetch(API_URL, {
+  const res = await fetch(BASE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const addToCart = async (product) => {
 
 // REMOVE FROM CART
 export const removeFromCart = async (productId) => {
-  const res = await fetch(`${API_URL}/${productId}`, {
+  const res = await fetch(`${BASE_URL}/${productId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -47,7 +47,7 @@ export const removeFromCart = async (productId) => {
 };
 
 export const decreaseFromCart = async (productId) => {
-  const res = await fetch(`${API_URL}/${productId}`, {
+  const res = await fetch(`${BASE_URL}/${productId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${getToken()}`,

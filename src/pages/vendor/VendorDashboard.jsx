@@ -14,7 +14,7 @@ import {
   Legend,
 } from "recharts";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 const CLOUD_NAME = "dv251twzd"; // 🔥 PUT YOUR REAL CLOUD NAME HERE
 
 export default function Dashboard() {

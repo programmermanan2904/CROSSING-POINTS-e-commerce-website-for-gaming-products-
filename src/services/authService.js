@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const loginUser = async (userData) => {
   try {
-    const response = await axios.post(`${API}/login`, userData);
+    const response = await axios.post(`${BASE_URL}/login`, userData);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -17,7 +17,7 @@ export const loginUser = async (userData) => {
 
 export const registerUser = async (userData) => {
   try {
-    const response = await axios.post(`${API}/register`, userData);
+    const response = await axios.post(`${BASE_URL}/register`, userData);
     return response.data;
   } catch (error) {
     if (error.response) {

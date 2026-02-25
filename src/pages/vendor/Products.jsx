@@ -22,12 +22,12 @@ export default function Products() {
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   /* ================= FETCH ================= */
   const fetchVendorProducts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/products/vendor`, {
+      const res = await axios.get(`${BASE_URL}/api/products/vendor`, {
         headers: { Authorization: `Bearer ${user?.token}` },
       });
       setProducts(Array.isArray(res.data) ? res.data : []);
@@ -85,14 +85,14 @@ export default function Products() {
 
       if (editingProduct) {
         await axios.put(
-          `${API_URL}/api/products/${editingProduct._id}`,
+          `${BASE_URL}/api/products/${editingProduct._id}`,
           formData,
           {
             headers: { Authorization: `Bearer ${user?.token}` },
           }
         );
       } else {
-        await axios.post(`${API_URL}/api/products`, formData, {
+        await axios.post(`${BASE_URL}/api/products`, formData, {
           headers: { Authorization: `Bearer ${user?.token}` },
         });
       }
@@ -138,7 +138,7 @@ export default function Products() {
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/api/products/${id}`, {
+      await axios.delete(`${BASE_URL}/api/products/${id}`, {
         headers: { Authorization: `Bearer ${user?.token}` },
       });
       fetchVendorProducts();
