@@ -15,7 +15,7 @@ import MyOrders from "./pages/MyOrders";
 import VendorLayout from "./layouts/VendorLayout";
 import Dashboard from "./pages/vendor/VendorDashboard";
 import Products from "./pages/vendor/Products";
-import VendorOrders from "./pages/vendor/VendorOrders";
+import VendorOrders from "./pages/vendor/vendorOrders";
 
 import VeltrixWidget from "./components/VeltrixWidget";
 import VeltrixPage from "./pages/VeltrixPage";
