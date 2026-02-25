@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import "../styles/Vendor.css";
+import "../styles/vendor.css";
 
 export default function VendorLayout() {
   return (
