@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import "../styles/navbar.css";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Navbar = () => {
   const location = useLocation();

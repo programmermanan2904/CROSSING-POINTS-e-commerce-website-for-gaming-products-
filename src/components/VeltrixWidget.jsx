@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaRobot } from "react-icons/fa";
 import "../styles/VeltrixWidget.css";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function VeltrixWidget() {
   const [open, setOpen] = useState(false);
