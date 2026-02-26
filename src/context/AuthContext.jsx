@@ -1,27 +1,19 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  // 🔥 Restore automatically on refresh
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-  // 🔥 Restore user on refresh
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (error) {
-      console.error("Auth restore error:", error);
-    }
-  }, []);
-
-  // 🔥 Login (used for BOTH login & register)
-  const login = (data) => {
+  // 🔥 Login (used for both login & register)
+  const login = ({ user, token }) => {
     const userData = {
-      ...data.user,
-      token: data.token,
+      ...user,
+      token,
     };
 
     localStorage.setItem("user", JSON.stringify(userData));
@@ -41,7 +33,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom hook
+// Custom Hook
 export const useAuth = () => {
   return useContext(AuthContext);
 };

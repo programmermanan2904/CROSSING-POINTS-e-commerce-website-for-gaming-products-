@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 import "../styles/auth.css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -78,12 +80,11 @@ export default function Register() {
         userData
       );
 
-      // If your backend now uses { success, message, data }
-      const user = response.data.data || response.data.user;
+      const user = response.data.data?.user || response.data.user;
       const token = response.data.data?.token || response.data.token;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      // 🔥 Use AuthContext instead of manual localStorage
+      login({ user, token });
 
       if (user.role === "vendor") {
         navigate("/vendor/dashboard");
@@ -163,7 +164,9 @@ export default function Register() {
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
               />
-              {errors.businessName && <span className="error">{errors.businessName}</span>}
+              {errors.businessName && (
+                <span className="error">{errors.businessName}</span>
+              )}
 
               <input
                 type="text"
@@ -171,7 +174,9 @@ export default function Register() {
                 value={gstNumber}
                 onChange={(e) => setGstNumber(e.target.value)}
               />
-              {errors.gstNumber && <span className="error">{errors.gstNumber}</span>}
+              {errors.gstNumber && (
+                <span className="error">{errors.gstNumber}</span>
+              )}
 
               <input
                 type="text"
@@ -179,7 +184,9 @@ export default function Register() {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />
-              {errors.location && <span className="error">{errors.location}</span>}
+              {errors.location && (
+                <span className="error">{errors.location}</span>
+              )}
             </>
           )}
 
