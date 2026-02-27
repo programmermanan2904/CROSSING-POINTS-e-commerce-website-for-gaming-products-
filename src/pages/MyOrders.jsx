@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import { useLocation } from "react-router-dom"; // ✅ ADDED
+import { useLocation } from "react-router-dom";
 import "../styles/myOrders.css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -9,13 +9,17 @@ const CLOUD_NAME = "dv251twzd";
 
 export default function MyOrders() {
   const { user } = useAuth();
-  const location = useLocation(); // ✅ ADDED
-  const showSuccess = location.state?.orderSuccess; // ✅ ADDED
+  const location = useLocation();
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+
+  // ✅ Success banner state
+  const [showSuccessBanner, setShowSuccessBanner] = useState(
+    location.state?.orderSuccess || false
+  );
 
   /* ================= FETCH ORDERS ================= */
   const fetchOrders = async () => {
@@ -46,6 +50,17 @@ export default function MyOrders() {
     }
   }, [user]);
 
+  // ✅ Auto hide success banner after 3 seconds
+  useEffect(() => {
+    if (showSuccessBanner) {
+      const timer = setTimeout(() => {
+        setShowSuccessBanner(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessBanner]);
+
   /* ================= CANCEL ORDER ================= */
   const handleCancel = async () => {
     try {
@@ -67,11 +82,14 @@ export default function MyOrders() {
     }
   };
 
+  /* ================= TIMELINE ================= */
   const renderTimeline = (status) => {
     const steps = ["processing", "shipped", "delivered"];
     const currentIndex = steps.indexOf(status);
     const progressPercent =
-      (currentIndex / (steps.length - 1)) * 66.66;
+      currentIndex >= 0
+        ? (currentIndex / (steps.length - 1)) * 66.66
+        : 0;
 
     return (
       <div className="timeline-wrapper">
@@ -102,6 +120,7 @@ export default function MyOrders() {
     );
   };
 
+  /* ================= LOADING ================= */
   if (loading) {
     return (
       <div className="orders-loading">
@@ -110,6 +129,7 @@ export default function MyOrders() {
     );
   }
 
+  /* ================= EMPTY ================= */
   if (!orders.length) {
     return (
       <div className="orders-empty">
@@ -119,6 +139,7 @@ export default function MyOrders() {
     );
   }
 
+  /* ================= STATS ================= */
   const totalOrders = orders.length;
 
   const totalSpent = orders.reduce(
@@ -136,17 +157,19 @@ export default function MyOrders() {
     (order) => order.orderStatus === "delivered"
   ).length;
 
+  /* ================= UI ================= */
   return (
     <div className="orders-container">
       <h2 className="orders-title">⚔ My Battle Orders</h2>
 
-      {/* ✅ SUCCESS BANNER ADDED */}
-      {showSuccess && (
+      {/* ✅ Success Banner */}
+      {showSuccessBanner && (
         <div className="order-success-banner">
           🎉 Order Placed Successfully!
         </div>
       )}
 
+      {/* Stats */}
       <div className="orders-stats">
         <div className="stat-card">
           <h3>{totalOrders}</h3>
@@ -169,6 +192,7 @@ export default function MyOrders() {
         </div>
       </div>
 
+      {/* Orders */}
       {orders.map((order) => (
         <div key={order._id} className="order-card">
           <div className="order-header">
@@ -243,6 +267,7 @@ export default function MyOrders() {
         </div>
       ))}
 
+      {/* Cancel Modal */}
       {showCancelModal && (
         <div className="cancel-modal-overlay">
           <div className="cancel-modal">
