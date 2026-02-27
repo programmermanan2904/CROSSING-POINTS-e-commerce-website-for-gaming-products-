@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom"; // ✅ ADDED
 import "../styles/myOrders.css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const CLOUD_NAME = "dv251twzd";
 
-export default function MyOrders()  {
+export default function MyOrders() {
   const { user } = useAuth();
+  const location = useLocation(); // ✅ ADDED
+  const showSuccess = location.state?.orderSuccess; // ✅ ADDED
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,39 +68,39 @@ export default function MyOrders()  {
   };
 
   const renderTimeline = (status) => {
-  const steps = ["processing", "shipped", "delivered"];
-  const currentIndex = steps.indexOf(status);
-  const progressPercent =
-    (currentIndex / (steps.length - 1)) * 66.66;
+    const steps = ["processing", "shipped", "delivered"];
+    const currentIndex = steps.indexOf(status);
+    const progressPercent =
+      (currentIndex / (steps.length - 1)) * 66.66;
 
-  return (
-    <div className="timeline-wrapper">
-      <div
-        className="timeline-progress"
-        style={{ width: `${progressPercent}%` }}
-      />
+    return (
+      <div className="timeline-wrapper">
+        <div
+          className="timeline-progress"
+          style={{ width: `${progressPercent}%` }}
+        />
 
-      <div className="timeline-steps">
-        {steps.map((step, index) => (
-          <div key={step} className="timeline-step">
-            <div
-              className={`timeline-dot ${
-                index <= currentIndex ? "active-dot" : ""
-              }`}
-            />
-            <span
-              className={`timeline-label ${
-                index <= currentIndex ? "active-label" : ""
-              }`}
-            >
-              {step}
-            </span>
-          </div>
-        ))}
+        <div className="timeline-steps">
+          {steps.map((step, index) => (
+            <div key={step} className="timeline-step">
+              <div
+                className={`timeline-dot ${
+                  index <= currentIndex ? "active-dot" : ""
+                }`}
+              />
+              <span
+                className={`timeline-label ${
+                  index <= currentIndex ? "active-label" : ""
+                }`}
+              >
+                {step}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   if (loading) {
     return (
@@ -136,6 +139,13 @@ export default function MyOrders()  {
   return (
     <div className="orders-container">
       <h2 className="orders-title">⚔ My Battle Orders</h2>
+
+      {/* ✅ SUCCESS BANNER ADDED */}
+      {showSuccess && (
+        <div className="order-success-banner">
+          🎉 Order Placed Successfully!
+        </div>
+      )}
 
       <div className="orders-stats">
         <div className="stat-card">

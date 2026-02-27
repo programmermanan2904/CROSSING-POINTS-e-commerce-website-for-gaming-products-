@@ -80,40 +80,44 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
-    if (!validatePayment()) return;
+  if (!validatePayment()) return;
 
-    if (!cart || cart.length === 0) {
-      setErrors({ cart: "Cart is empty" });
-      return;
-    }
+  if (!cart || cart.length === 0) {
+    setErrors({ cart: "Cart is empty" });
+    return;
+  }
 
-    try {
-      const orderData = {
-        items: cart.map((item) => ({
-          productId: item._id,
-          quantity: item.quantity,
-        })),
-        shippingAddress: address,
-        paymentMethod,
-      };
+  try {
+    const orderData = {
+      items: cart.map((item) => ({
+        productId: item._id,
+        quantity: item.quantity,
+      })),
+      shippingAddress: address,
+      paymentMethod,
+    };
 
-      await axios.post(`${BASE_URL}/api/orders`, orderData, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,  // ✅ FIXED
-        },
-      });
+    await axios.post(`${BASE_URL}/api/orders`, orderData, {
+      headers: {
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
 
-      setCart([]);
-      localStorage.removeItem("cart");
+    setCart([]);
+    localStorage.removeItem("cart");
 
-      navigate("/my-orders", { replace: true });  // ✅ redirect properly
+    // ✅ ONLY CHANGE HERE
+    navigate("/my-orders", {
+      replace: true,
+      state: { orderSuccess: true },
+    });
 
-    } catch (error) {
-      setErrors({
-        api: error.response?.data?.message || "Order failed",
-      });
-    }
-  };
+  } catch (error) {
+    setErrors({
+      api: error.response?.data?.message || "Order failed",
+    });
+  }
+};
 
   return (
     <div className="checkout-wrapper">
