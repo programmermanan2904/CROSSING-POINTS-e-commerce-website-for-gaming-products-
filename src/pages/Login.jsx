@@ -29,42 +29,38 @@ export default function Login() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+// ================= LOGIN =================
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-  // ================= LOGIN =================
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  if (!validateForm()) return;
 
-    if (!validateForm()) return;
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/users/login`,
+      { email, password }
+    );
 
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/users/login`,
-        { email, password }
-      );
+    const data = response.data;
 
-      const data = response.data;
+    const userData = data.data?.user || data.user;
+    const token = data.data?.token || data.token;
 
-      // If backend uses structured response
-      const user = data.data?.user || data.user;
-      const token = data.data?.token || data.token;
+    // Use AuthContext login ONLY
+    login({ user: userData, token });
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      login({ user, token });
-
-      if (user.role === "vendor") {
-        navigate("/vendor/dashboard");
-      } else {
-        navigate("/");
-      }
-
-    } catch (error) {
-      setErrors({
-        api: error.response?.data?.message || "Login failed",
-      });
+    if (userData.role === "vendor") {
+      navigate("/vendor/dashboard");
+    } else {
+      navigate("/");
     }
-  };
+
+  } catch (error) {
+    setErrors({
+      api: error.response?.data?.message || "Login failed",
+    });
+  }
+};
 
   return (
     <section className="auth-page">

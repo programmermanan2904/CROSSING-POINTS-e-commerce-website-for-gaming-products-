@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/myOrders.css";
 import { useAuth } from "../context/AuthContext";
+import "../styles/myOrders.css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const CLOUD_NAME = "dv251twzd";
 
-export default function MyOrders() {
+export default function MyOrders()  {
   const { user } = useAuth();
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // 🔥 NEW STATES FOR MODAL
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
+  /* ================= FETCH ORDERS ================= */
   const fetchOrders = async () => {
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/orders/my`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
+      if (!user?.token) {
+        setLoading(false);
+        return;
+      }
+
+      const res = await axios.get(`${BASE_URL}/api/orders/my`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       setOrders(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
@@ -38,11 +40,10 @@ export default function MyOrders() {
   useEffect(() => {
     if (user?.token) {
       fetchOrders();
-    } else {
-      setLoading(false);
     }
   }, [user]);
 
+  /* ================= CANCEL ORDER ================= */
   const handleCancel = async () => {
     try {
       await axios.put(
@@ -55,60 +56,69 @@ export default function MyOrders() {
         }
       );
 
-      // Remove cancelled order from UI
-      setOrders((prev) =>
-        prev.filter((order) => order._id !== selectedOrderId)
-      );
-
+      await fetchOrders();
       setShowCancelModal(false);
       setSelectedOrderId(null);
-
     } catch (error) {
       alert(error.response?.data?.message || "Cancel failed");
     }
   };
 
   const renderTimeline = (status) => {
-    const steps = ["processing", "shipped", "delivered"];
+  const steps = ["processing", "shipped", "delivered"];
+  const currentIndex = steps.indexOf(status);
+  const progressPercent =
+    (currentIndex / (steps.length - 1)) * 66.66;
 
-    return (
-      <div className="timeline">
-        {steps.map((step, index) => {
-          const isActive = steps.indexOf(status) >= index;
+  return (
+    <div className="timeline-wrapper">
+      <div
+        className="timeline-progress"
+        style={{ width: `${progressPercent}%` }}
+      />
 
-          return (
+      <div className="timeline-steps">
+        {steps.map((step, index) => (
+          <div key={step} className="timeline-step">
             <div
-              key={step}
-              className={`timeline-step ${isActive ? "active" : ""}`}
+              className={`timeline-dot ${
+                index <= currentIndex ? "active-dot" : ""
+              }`}
+            />
+            <span
+              className={`timeline-label ${
+                index <= currentIndex ? "active-label" : ""
+              }`}
             >
-              <div className="circle"></div>
-              <span>{step}</span>
-            </div>
-          );
-        })}
+              {step}
+            </span>
+          </div>
+        ))}
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-  if (loading)
+  if (loading) {
     return (
       <div className="orders-loading">
         Loading your battle history...
       </div>
     );
+  }
 
-  if (!Array.isArray(orders) || orders.length === 0)
+  if (!orders.length) {
     return (
       <div className="orders-empty">
         <h2>No Orders Found</h2>
         <p>Your gaming journey hasn’t started yet 🚀</p>
       </div>
     );
+  }
 
   const totalOrders = orders.length;
-  const totalSpent = orders
-  .filter(order => order.orderStatus !== "delivered")
-  .reduce(
+
+  const totalSpent = orders.reduce(
     (acc, order) => acc + (order.totalAmount || 0),
     0
   );
@@ -119,7 +129,6 @@ export default function MyOrders() {
       order.orderStatus === "shipped"
   ).length;
 
-
   const deliveredOrders = orders.filter(
     (order) => order.orderStatus === "delivered"
   ).length;
@@ -128,7 +137,6 @@ export default function MyOrders() {
     <div className="orders-container">
       <h2 className="orders-title">⚔ My Battle Orders</h2>
 
-      {/* Stats */}
       <div className="orders-stats">
         <div className="stat-card">
           <h3>{totalOrders}</h3>
@@ -151,12 +159,10 @@ export default function MyOrders() {
         </div>
       </div>
 
-      {/* Orders */}
       {orders.map((order) => (
         <div key={order._id} className="order-card">
-
           <div className="order-header">
-            <span className="order-id">
+            <span>
               Order ID: {order._id.slice(-6).toUpperCase()}
             </span>
 
@@ -172,54 +178,44 @@ export default function MyOrders() {
 
           {renderTimeline(order.orderStatus)}
 
-          {/* Items */}
           <div className="order-items">
-            {Array.isArray(order.items) && order.items.length > 0 ? (
-              order.items.map((item, index) => {
+            {order.items.map((item) => {
+              const imagePublicId = item?.product?.image;
+              const imageUrl = imagePublicId
+                ? `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${imagePublicId}`
+                : null;
 
-                const imagePublicId = item?.product?.image;
-                const imageUrl = imagePublicId
-                  ? `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${imagePublicId}`
-                  : null;
+              return (
+                <div key={item._id} className="order-item">
+                  {imageUrl && (
+                    <img
+                      src={imageUrl}
+                      alt={item?.product?.name || "Product"}
+                    />
+                  )}
 
-                return (
-                  <div key={item._id || index} className="order-item">
-
-                    {imageUrl && (
-                      <img
-                        src={imageUrl}
-                        alt={item?.product?.name || "Product"}
-                        className="order-image"
-                      />
-                    )}
-
-                    <div className="item-info">
-                      <h4>{item?.product?.name || "Product"}</h4>
-                      <p>₹ {item?.price}</p>
-                      <p>Qty: {item?.quantity}</p>
-                    </div>
-
+                  <div>
+                    <h4>{item?.product?.name}</h4>
+                    <p>₹ {item?.price}</p>
+                    <p>Qty: {item?.quantity}</p>
                   </div>
-                );
-              })
-            ) : (
-              <p>No items found in this order.</p>
-            )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Footer */}
           <div className="order-footer">
-            <div className="delivery-info">
+            <div>
               <p>
                 Expected Delivery:{" "}
                 {order.estimatedDelivery
-                  ? new Date(order.estimatedDelivery).toLocaleDateString()
+                  ? new Date(
+                      order.estimatedDelivery
+                    ).toLocaleDateString()
                   : "N/A"}
               </p>
 
-              <p className="order-total">
-                Total: ₹ {order.totalAmount}
-              </p>
+              <p>Total: ₹ {order.totalAmount}</p>
             </div>
 
             {order.orderStatus === "processing" && (
@@ -234,15 +230,12 @@ export default function MyOrders() {
               </button>
             )}
           </div>
-
         </div>
       ))}
 
-      {/* 🔥 CONFIRMATION MODAL */}
       {showCancelModal && (
         <div className="cancel-modal-overlay">
           <div className="cancel-modal">
-
             <h3>⚠ Cancel Order?</h3>
             <p>
               Are you sure you want to cancel this order?
@@ -267,11 +260,9 @@ export default function MyOrders() {
                 Yes, Cancel
               </button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }

@@ -3,13 +3,14 @@ import { createContext, useState, useContext } from "react";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  // 🔥 Restore automatically on refresh
+
+  // Restore user on refresh
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  // 🔥 Login (used for both login & register)
+  // Login
   const login = ({ user, token }) => {
     const userData = {
       ...user,
@@ -20,7 +21,7 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
-  // 🔥 Logout
+  // Logout
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -33,7 +34,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom Hook
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

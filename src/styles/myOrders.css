@@ -23,11 +23,6 @@
   transition: 0.3s ease;
 }
 
-.order-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(142, 45, 226, 0.5);
-}
-
 .order-header {
   display: flex;
   justify-content: space-between;
@@ -67,7 +62,7 @@
   flex-wrap: wrap;
 }
 
-/* 🔥 Status Glow */
+/* ================= STATUS BADGE ================= */
 
 .status {
   padding: 6px 12px;
@@ -105,7 +100,7 @@
   box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
 }
 
-/* 🔥 Cancel Button */
+/* ================= CANCEL BUTTON ================= */
 
 .cancel-btn {
   margin-top: 10px;
@@ -123,6 +118,8 @@
   box-shadow: 0 0 15px rgba(255, 75, 43, 0.7);
 }
 
+/* ================= LOADING & EMPTY ================= */
+
 .orders-loading,
 .orders-empty {
   text-align: center;
@@ -130,53 +127,73 @@
   font-size: 1.2rem;
 }
 
-.timeline {
+/* ================= TIMELINE ================= */
+
+.timeline-wrapper {
+  position: relative;
+  margin: 40px 0;
+}
+
+.timeline-steps {
   display: flex;
   justify-content: space-between;
-  margin: 15px 0;
+  position: relative;
+}
+
+/* Base Line (centered between dots) */
+.timeline-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: calc(100% / 6);
+  width: calc(100% - (100% / 3));
+  height: 3px;
+  background: #333;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+/* Active Progress Line */
+.timeline-progress {
+  position: absolute;
+  top: 9px;
+  left: calc(100% / 6);
+  height: 3px;
+  background: #a855f7;
+  border-radius: 10px;
+  z-index: 1;
+  transition: width 0.4s ease;
 }
 
 .timeline-step {
-  text-align: center;
   flex: 1;
+  text-align: center;
   position: relative;
-  color: #777;
-  font-size: 0.8rem;
 }
 
-.timeline-step .circle {
-  width: 14px;
-  height: 14px;
+.timeline-dot {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  margin: 0 auto 5px;
-  background: #333;
+  background: #444;
+  margin: 0 auto;
 }
 
-.timeline-step.active {
-  color: #8e2de2;
+.active-dot {
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7;
 }
 
-.timeline-step.active .circle {
-  background: #8e2de2;
-  box-shadow: 0 0 10px #8e2de2;
+.timeline-label {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #777;
+  text-transform: capitalize;
 }
 
-/* connecting line */
-.timeline-step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 7px;
-  right: -50%;
-  width: 100%;
-  height: 2px;
-  background: #333;
-  z-index: -1;
+.active-label {
+  color: #a855f7;
 }
-
-.timeline-step.active:not(:last-child)::after {
-  background: #8e2de2;
-}
-
 /* ================= STATS SECTION ================= */
 
 .orders-stats {
@@ -191,7 +208,6 @@
   border: 1px solid rgba(138, 43, 226, 0.3);
   border-radius: 14px;
   padding: 25px;
-  text-align: left;
   transition: 0.3s ease;
   box-shadow: 0 0 20px rgba(138, 43, 226, 0.15);
 }
@@ -201,33 +217,8 @@
   box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
 }
 
-.stat-label {
-  font-size: 14px;
-  color: #aaa;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-}
+/* ================= CANCEL MODAL ================= */
 
-.stat-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.stat-value.active {
-  color: #00f5ff;
-}
-
-.stat-value.delivered {
-  color: #4caf50;
-}
-
-.stat-card.highlight {
-  border: 1px solid rgba(255, 0, 255, 0.5);
-  box-shadow: 0 0 25px rgba(255, 0, 255, 0.25);
-}
-
-/* Overlay */
 .cancel-modal-overlay {
   position: fixed;
   top: 0;
@@ -242,7 +233,6 @@
   z-index: 1000;
 }
 
-/* Modal Box */
 .cancel-modal {
   background: linear-gradient(145deg, #111827, #1f2937);
   padding: 30px;
@@ -251,53 +241,4 @@
   text-align: center;
   border: 1px solid #2d3748;
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
-}
-
-.cancel-modal h3 {
-  margin-bottom: 15px;
-  color: #f87171;
-}
-
-.cancel-modal p {
-  font-size: 14px;
-  margin-bottom: 25px;
-  color: #d1d5db;
-}
-
-/* Buttons */
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.no-btn {
-  flex: 1;
-  padding: 10px;
-  background: #374151;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.no-btn:hover {
-  background: #4b5563;
-}
-
-.yes-btn {
-  flex: 1;
-  padding: 10px;
-  background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.yes-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
 }
